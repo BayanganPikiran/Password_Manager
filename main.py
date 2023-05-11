@@ -19,18 +19,22 @@ class UI:
 
         self.username_var = tk.StringVar()
         self.username_entry = self.create_username_entry()
-        self.password_entry = None
-        self.generate_password_btn = None
-        self.retrieve_password_btn = None
-        self.add_password_btn = None
+
+        self.password_var = tk.StringVar()
+        self.password_entry = self.create_password_entry()
+
+        self.generate_password_btn = self.create_gen_pass_btn()
+        self.get_password_btn = self.create_get_pass_btn()
+        self.add_password_btn = self.create_add_pass_btn()
+        self.delete_password_btn = self.create_del_pass_btn()
 
     def create_logo_frame(self):
-        logo_frame = tk.Frame(self.root)
+        logo_frame = tk.Frame(self.root, bg=BACKGROUND_WHITE)
         logo_frame.pack(expand=True, fill=tk.BOTH)
         return logo_frame
 
     def create_logo_canvas(self):
-        canvas = tk.Canvas(self.logo_frame, width=CANVAS_WIDTH, height=CANVAS_HEIGHT)
+        canvas = tk.Canvas(self.logo_frame, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, bg=BACKGROUND_WHITE)
         logo = tk.PhotoImage(file="logo_resized.png")
         self.root.logo = logo  # keeps the logo from being garbage collected
         canvas.create_image((CANVAS_WIDTH / 2), (CANVAS_HEIGHT / 2), image=logo)
@@ -38,30 +42,72 @@ class UI:
         return canvas
 
     def create_fields_frame(self):
-        fields_frame = tk.Frame(self.root)
+        fields_frame = tk.Frame(self.root, bg=BACKGROUND_WHITE, padx=5, pady=5)
         fields_frame.pack(expand=True, fill=tk.BOTH)
         return fields_frame
 
     def create_website_entry(self):
-        web_entry = tk.Entry(self.fields_frame, bg='white', width=200, borderwidth=2,
+        web_entry = tk.Entry(self.fields_frame, bg='white', width=83, borderwidth=2,
                              textvariable=self.website_entry_var, justify=tk.LEFT)
         web_entry.insert(0, "Enter website url")
-        web_entry.grid(row=0, column=0, columnspan=2, sticky=tk.NSEW, padx=2, pady=2)
+        web_entry.grid(row=0, column=0, columnspan=3, sticky=tk.NSEW, padx=2, pady=2)
         return web_entry
 
     def create_username_entry(self):
-        user_entry = tk.Entry(self.fields_frame, bg='white', width=200, borderwidth=2,
+        user_entry = tk.Entry(self.fields_frame, bg='white', width=83, borderwidth=2,
                               textvariable=self.username_var, justify=tk.LEFT)
         user_entry.insert(0, "Enter email or username")
-        user_entry.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW, padx=2, pady=2)
+        user_entry.grid(row=1, column=0, columnspan=3, sticky=tk.NSEW, padx=2, pady=2)
         return user_entry
+
+    def create_password_entry(self):
+        password_entry = tk.Entry(self.fields_frame, bg='white', width=50, borderwidth=2,
+                                  textvariable=self.password_var, justify=tk.LEFT)
+        password_entry.insert(0, "Enter your own password or click generate button")
+        password_entry.grid(row=2, column=0, columnspan=2, sticky=tk.NSEW, padx=2, pady=2)
+        return password_entry
+
+    def create_gen_pass_btn(self):
+        gen_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.generate_password,
+                             width=5, text="Generate password")
+        gen_pass.grid(row=2, column=2, sticky=tk.NSEW, padx=2, pady=2)
+        return gen_pass
+
+    def generate_password(self):
+        pass
+
+    def create_get_pass_btn(self):
+        get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_password,
+                             width=20, text="Retrieve password")
+        get_pass.grid(row=3, column=0, sticky=tk.NSEW, padx=2, pady=2)
+        return get_pass
+
+    def get_password(self):
+        pass
+
+    def create_add_pass_btn(self):
+        add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.add_password,
+                             width=20, text="Add password")
+        add_pass.grid(row=3, column=1, sticky=tk.NSEW, padx=2, pady=2)
+        return add_pass
+
+    def add_password(self):
+        pass
+
+    def create_del_pass_btn(self):
+        del_pas = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.delete_password,
+                            width=20, text="Delete password")
+        del_pas.grid(row=3, column=2, sticky=tk.NSEW, padx=2, pady=2)
+        return del_pas
+
+    def delete_password(self):
+        pass
 
 
 
 
 
     def run_app(self):
-        self.print_web_entry()
         self.root.mainloop()
 
 
