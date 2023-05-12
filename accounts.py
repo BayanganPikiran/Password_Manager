@@ -20,3 +20,12 @@ class Account:
     def save_account(self, website, username, password):
         account = {website: [username, password]}
         self.accounts_dictionary.update(account)
+
+    def generate_password(self):
+        pass
+
+    def retrieve_account(self):
+        pass
+
+    def delete_account(self):
+        pass

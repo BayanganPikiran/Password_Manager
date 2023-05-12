@@ -73,8 +73,6 @@ class UI:
         gen_pass.grid(row=2, column=2, sticky=tk.NSEW, padx=2, pady=2)
         return gen_pass
 
-    def generate_password(self):
-        pass
 
     def create_get_pass_btn(self):
         get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_password,
@@ -108,6 +106,7 @@ class UI:
         username = self.username_var.get()
         password = self.password_var.get()
         return website, username, password
+
 
 
 
