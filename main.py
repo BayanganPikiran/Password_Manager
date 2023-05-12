@@ -25,7 +25,7 @@ class UI:
 
         self.generate_password_btn = self.create_gen_pass_btn()
         self.get_password_btn = self.create_get_pass_btn()
-        self.add_password_btn = self.create_add_pass_btn()
+        self.save_password_btn = self.create_save_pass_btn()
         self.delete_password_btn = self.create_del_pass_btn()
 
     def create_logo_frame(self):
@@ -85,13 +85,13 @@ class UI:
     def get_password(self):
         pass
 
-    def create_add_pass_btn(self):
-        add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.add_password,
-                             width=20, text="Add password")
+    def create_save_pass_btn(self):
+        add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_account_elements,
+                             width=20, text="Save password")
         add_pass.grid(row=3, column=1, sticky=tk.NSEW, padx=2, pady=2)
         return add_pass
 
-    def add_password(self):
+    def save_password(self):
         pass
 
     def create_del_pass_btn(self):
@@ -102,6 +102,13 @@ class UI:
 
     def delete_password(self):
         pass
+
+    def get_account_elements(self):
+        website = self.website_entry_var.get()
+        username = self.username_var.get()
+        password = self.password_var.get()
+        return website, username, password
+
 
 
 
