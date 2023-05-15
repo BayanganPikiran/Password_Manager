@@ -75,8 +75,11 @@ class UI:
         return gen_pass
 
     def generate_password(self):
-        pass
-
+        password_list = []
+        for i in range(len(MERGED_CHARS)):
+            password_list += random.sample(MERGED_CHARS[i], 4)
+        password = ''.join(sorted(password_list, key=lambda x: random.random()))
+        print(password)
 
     def create_get_pass_btn(self):
         get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_password,
