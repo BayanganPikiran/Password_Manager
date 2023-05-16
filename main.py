@@ -79,7 +79,8 @@ class UI:
         for i in range(len(MERGED_CHARS)):
             password_list += random.sample(MERGED_CHARS[i], 4)
         password = ''.join(sorted(password_list, key=lambda x: random.random()))
-        print(password)
+        self.password_var.set(password)
+        self.save_password()
 
     def create_get_pass_btn(self):
         get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_password,
@@ -91,10 +92,29 @@ class UI:
         pass
 
     def create_save_pass_btn(self):
-        add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_account_elements,
+        add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.create_save_toplevel,
                              width=20, text="Save password")
         add_pass.grid(row=3, column=1, sticky=tk.NSEW, padx=2, pady=2)
         return add_pass
+
+    def create_save_toplevel(self):
+        save_acct = tk.Toplevel(width=200, height=200)
+        save_acct.wm_transient(self.root)
+        label_frame = tk.Frame(save_acct, width=190, height=160)
+        label_frame.pack(expand=True, fill=tk.BOTH)
+        btn_frame = tk.Frame(save_acct, width=190, height=30)
+        btn_frame.pack(expand=True, fill=tk.BOTH)
+        header = tk.Label(label_frame, text="Confirm the following details:")
+        site_label = tk.Label(label_frame, text=f"website: {self.website_entry_var.get()}")
+        user_label = tk.Label(label_frame, text=f"username: {self.username_var.get()}")
+        pass_label = tk.Label(label_frame, text=f"password: {self.username_var.get()}")
+        header.grid(row=0, column=0, sticky=tk.NSEW)
+        site_label.grid(row=1, column=0, sticky=tk.NSEW)
+        user_label.grid(row=2, column=0, sticky=tk.NSEW)
+        pass_label.grid(row=3, column=0, sticky=tk.NSEW)
+        save_btn = tk.Button(btn_frame, text="Save", anchor=tk.CENTER, command=self.save_password)
+        save_btn.pack(expand=True, fill=tk.BOTH)
+        save_acct.mainloop()
 
     def save_password(self):
         pass
