@@ -10,17 +10,20 @@ class Account:
         self.cursor = self.conn.cursor()
         self.account_table = self.create_account_table()
 
-    def create_account_table(self):
-        account_table = self.cursor.execute("""CREATE TABLE accounts(
+    def create_accounts_table(self):
+        accounts_table = self.cursor.execute("""CREATE TABLE accounts(
             website text,
             username text,
             password text)""")
         self.conn.commit()
         self.conn.close()
-        return account_table
+        return accounts_table
 
-    def create_record(self, site, user, password):
-        pass
+    def create_record(self, website, username, password):
+        self.cursor.execute("INSERT INTO accounts (website, username, password) VALUES (?, ?, ?)",
+                            (website, username, password))
+        self.conn.commit()
+        self.conn.close()
 
     def update_record(self):
         pass
