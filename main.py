@@ -6,7 +6,7 @@ import random
 
 class UI(Account):
     def __init__(self):
-        Account.__init__("password_accounts.db")
+        Account.__init__(self, "password_accounts.db")
         self.root = tk.Tk()
         self.root.geometry(("{}x{}".format(ROOT_WIDTH, ROOT_HEIGHT)))
         self.root.resizable(None, None)
@@ -119,15 +119,14 @@ class UI(Account):
                              command=lambda: [self.create_record(self.website_var.get(),
                                                                  self.username_var.get(),
                                                                  self.password_var.get()),
+                                              self.confirm_record_input(),
                                               save_acct.destroy()], )
         save_btn.pack(expand=True, fill=tk.BOTH)
         save_acct.mainloop()
 
-    def create_account(self):
-        new_account = Account(self.website_var.get(), self.username_var.get(), self.password_var.get())
-        new_account.save_account()
-
-
+    # def create_account(self):
+    #     new_account = Account(self.website_var.get(), self.username_var.get(), self.password_var.get())
+    #     new_account.save_account()
 
     def save_password(self):
         pass

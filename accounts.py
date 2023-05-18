@@ -8,22 +8,32 @@ class Account:
         self.database = db_path
         self.conn = sqlite3.connect(self.database)
         self.cursor = self.conn.cursor()
-        self.account_table = self.create_account_table()
+        # self.account_table = self.cursor.execute("""CREATE TABLE accounts(
+        #     website text,
+        #     username text,
+        #     password text)""")
+        # self.conn.commit()
+        self.account_table = self.create_accounts_table()
 
     def create_accounts_table(self):
-        accounts_table = self.cursor.execute("""CREATE TABLE accounts(
+        accounts_table = self.cursor.execute("""CREATE TABLE IF NOT EXISTS accounts(
             website text,
             username text,
             password text)""")
         self.conn.commit()
-        self.conn.close()
+        # self.conn.close()
         return accounts_table
 
     def create_record(self, website, username, password):
         self.cursor.execute("INSERT INTO accounts (website, username, password) VALUES (?, ?, ?)",
                             (website, username, password))
         self.conn.commit()
-        self.conn.close()
+
+    def confirm_record_input(self):
+        self.conn = sqlite3.connect(self.database)
+        self.cursor.execute("SELECT * FROM accounts")
+        print(self.cursor.fetchall())
+        self.conn.commit()
 
     def update_record(self):
         pass
