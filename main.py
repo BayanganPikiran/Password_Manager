@@ -27,7 +27,7 @@ class UI(Account):
         self.password_entry = self.create_password_entry()
 
         self.generate_password_btn = self.create_gen_pass_btn()
-        self.get_password_btn = self.create_get_pass_btn()
+        self.get_password_btn = self.create_retrieve_pass_btn()
         self.save_password_btn = self.create_save_pass_btn()
         self.delete_password_btn = self.create_del_pass_btn()
 
@@ -82,15 +82,15 @@ class UI(Account):
             password_list += random.sample(MERGED_CHARS[i], 4)
         password = ''.join(sorted(password_list, key=lambda x: random.random()))
         self.password_var.set(password)
-        self.save_password()
 
-    def create_get_pass_btn(self):
-        get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.get_password,
+    def create_retrieve_pass_btn(self):
+        get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
+                             command=lambda: self.fetch_password(self.website_var.get(), self.username_var.get()),
                              width=20, text="Retrieve password")
         get_pass.grid(row=3, column=0, sticky=tk.NSEW, padx=2, pady=2)
         return get_pass
 
-    def get_password(self):
+    def retrieve_password(self):
         pass
 
     def create_save_pass_btn(self):
@@ -123,13 +123,6 @@ class UI(Account):
                                               save_acct.destroy()], )
         save_btn.pack(expand=True, fill=tk.BOTH)
         save_acct.mainloop()
-
-    # def create_account(self):
-    #     new_account = Account(self.website_var.get(), self.username_var.get(), self.password_var.get())
-    #     new_account.save_account()
-
-    def save_password(self):
-        pass
 
     def create_del_pass_btn(self):
         del_pas = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.delete_password,

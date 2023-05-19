@@ -8,11 +8,6 @@ class Account:
         self.database = db_path
         self.conn = sqlite3.connect(self.database)
         self.cursor = self.conn.cursor()
-        # self.account_table = self.cursor.execute("""CREATE TABLE accounts(
-        #     website text,
-        #     username text,
-        #     password text)""")
-        # self.conn.commit()
         self.account_table = self.create_accounts_table()
 
     def create_accounts_table(self):
@@ -21,7 +16,6 @@ class Account:
             username text,
             password text)""")
         self.conn.commit()
-        # self.conn.close()
         return accounts_table
 
     def create_record(self, website, username, password):
@@ -38,8 +32,13 @@ class Account:
     def update_record(self):
         pass
 
-    def fetch_record(self):
-        pass
+    def fetch_password(self, site, user):
+        query = "SELECT password FROM accounts WHERE website=? AND username=?"
+        parameters = (site, user)
+        self.cursor.execute(query, parameters)
+        items = self.cursor.fetchall()
+        for item in items:
+            print(item)
 
     def delete_record(self):
         pass
