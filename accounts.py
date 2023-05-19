@@ -38,7 +38,8 @@ class Account:
         self.cursor.execute(query, parameters)
         items = self.cursor.fetchall()
         for item in items:
-            print(item)
+            password = str(item).strip("'()',")
+            return password
 
     def delete_record(self):
         pass

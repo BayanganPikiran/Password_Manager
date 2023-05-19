@@ -85,13 +85,26 @@ class UI(Account):
 
     def create_retrieve_pass_btn(self):
         get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
-                             command=lambda: self.fetch_password(self.website_var.get(), self.username_var.get()),
+                             command=lambda: self.retrieve_password_toplevel(),
                              width=20, text="Retrieve password")
         get_pass.grid(row=3, column=0, sticky=tk.NSEW, padx=2, pady=2)
         return get_pass
 
-    def retrieve_password(self):
-        pass
+    def retrieve_password_toplevel(self):
+        webvar = self.website_var.get()
+        uservar = self.username_var.get()
+        pass_var = self.fetch_password(webvar, uservar)
+        retrieve_pass = tk.Toplevel(width=200, height=200, pady=5, padx=5)
+        retrieve_pass.title("Retrieve Password")
+        retrieve_pass.wm_transient(self.root)
+        header = tk.Label(retrieve_pass, text="The password for:", font=FONT_TOPLEVEL)
+        header.pack(expand=True, fill=tk.BOTH)
+        site = tk.Label(retrieve_pass, text=f"Website: {webvar}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site.pack(expand=True, fill=tk.BOTH)
+        user = tk.Label(retrieve_pass, text=f"Username: {uservar}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user.pack(expand=True, fill=tk.BOTH)
+        password = tk.Label(retrieve_pass, text=f"is: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        password.pack(expand=True, fill=tk.BOTH)
 
     def create_save_pass_btn(self):
         add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.create_save_toplevel,
