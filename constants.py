@@ -1,6 +1,6 @@
 # Dimensions
-ROOT_WIDTH = 600
-ROOT_HEIGHT = 445
+ROOT_WIDTH = 595
+ROOT_HEIGHT = 471
 
 FIELDS_WIDTH = 500
 FIELDS_HEIGHT = 300
@@ -32,3 +32,6 @@ MERGED_CHARS = [["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"
                 ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
                 ['`', "~", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
                  "[", "]", "{", "}", "|", ";", ":", ",", ".", "<", ">", "/", "?"]]
+
+# Font
+FONT_TOPLEVEL = ("Helvetica", 14)

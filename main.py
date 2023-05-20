@@ -27,9 +27,10 @@ class UI(Account):
         self.password_entry = self.create_password_entry()
 
         self.generate_password_btn = self.create_gen_pass_btn()
-        self.get_password_btn = self.create_retrieve_pass_btn()
-        self.save_password_btn = self.create_save_pass_btn()
-        self.delete_password_btn = self.create_del_record_btn()
+        self.save_record_btn = self.create_save_record_btn()
+        self.delete_record_btn = self.create_del_record_btn()
+        self.retrieve_password_btn = self.create_retrieve_pass_btn()
+        self.update_password_btn = self.create_update_pass_btn()
 
     def create_logo_frame(self):
         logo_frame = tk.Frame(self.root, bg=BACKGROUND_WHITE)
@@ -50,30 +51,30 @@ class UI(Account):
         return fields_frame
 
     def create_website_entry(self):
-        web_entry = tk.Entry(self.fields_frame, bg='white', width=83, borderwidth=2,
+        web_entry = tk.Entry(self.fields_frame, bg='white', width=82, borderwidth=2,
                              textvariable=self.website_var, justify=tk.LEFT)
         web_entry.insert(0, "Enter website url")
         web_entry.grid(row=0, column=0, columnspan=3, sticky=tk.NSEW, padx=2, pady=2)
         return web_entry
 
     def create_username_entry(self):
-        user_entry = tk.Entry(self.fields_frame, bg='white', width=83, borderwidth=2,
+        user_entry = tk.Entry(self.fields_frame, bg='white', width=82, borderwidth=2,
                               textvariable=self.username_var, justify=tk.LEFT)
         user_entry.insert(0, "Enter email or username")
         user_entry.grid(row=1, column=0, columnspan=3, sticky=tk.NSEW, padx=2, pady=2)
         return user_entry
 
     def create_password_entry(self):
-        password_entry = tk.Entry(self.fields_frame, bg='white', width=50, borderwidth=2,
+        password_entry = tk.Entry(self.fields_frame, bg='white', width=40, borderwidth=2,
                                   textvariable=self.password_var, justify=tk.LEFT)
-        password_entry.insert(0, "Enter your own password or click generate button")
-        password_entry.grid(row=2, column=0, columnspan=2, sticky=tk.NSEW, padx=2, pady=2)
+        password_entry.insert(0, "Enter password or click generate button")
+        password_entry.grid(row=2, column=0, sticky=tk.NSEW, padx=2, pady=2)
         return password_entry
 
     def create_gen_pass_btn(self):
         gen_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.generate_password,
-                             width=5, text="Generate password")
-        gen_pass.grid(row=2, column=2, sticky=tk.NSEW, padx=2, pady=2)
+                             width=37, text="Generate password")
+        gen_pass.grid(row=2, column=1, sticky=tk.NSEW, padx=2, pady=2)
         return gen_pass
 
     def generate_password(self):
@@ -87,7 +88,7 @@ class UI(Account):
         get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
                              command=lambda: self.retrieve_password_toplevel(),
                              width=20, text="Retrieve password")
-        get_pass.grid(row=3, column=0, sticky=tk.NSEW, padx=2, pady=2)
+        get_pass.grid(row=4, column=0, sticky=tk.NSEW, padx=2, pady=2)
         return get_pass
 
     def retrieve_password_toplevel(self):
@@ -106,10 +107,40 @@ class UI(Account):
         password = tk.Label(retrieve_pass, text=f"is: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
         password.pack(expand=True, fill=tk.BOTH)
 
-    def create_save_pass_btn(self):
+    def create_update_pass_btn(self):
+        update_btn = tk.Button(self.fields_frame, bg=BUTTON_GRAY, text="Update password",
+                               command=self.create_update_pass_toplevel)
+        update_btn.grid(row=4, column=1, sticky=tk.NSEW, padx=2, pady=2)
+        return update_btn
+
+    def create_update_pass_toplevel(self):
+        web_var = self.website_var.get()
+        user_var = self.username_var.get()
+        pass_var = self.password_var.get()
+        update_pass = tk.Toplevel(width=200, height=200, padx=5, pady=5)
+        update_pass.title("Update Password")
+        update_pass.wm_transient(self.root)
+        label_frame = tk.Frame(update_pass, width=190, height=160)
+        label_frame.pack(expand=True, fill=tk.BOTH)
+        btn_frame = tk.Frame(update_pass, width=190, height=30, pady=5)
+        btn_frame.pack(expand=True, fill=tk.BOTH)
+        header = tk.Label(label_frame, text="You are updating your password for:", font=FONT_TOPLEVEL)
+        header.pack(expand=True, fill=tk.BOTH)
+        site = tk.Label(label_frame, text=f"Website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site.pack(expand=True, fill=tk.BOTH)
+        user = tk.Label(label_frame, text=f"Username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user.pack(expand=True, fill=tk.BOTH)
+        password = tk.Label(label_frame, text=f"To: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        password.pack(expand=True, fill=tk.BOTH)
+        confirm_btn = tk.Button(btn_frame, text="Update password",
+                                command=lambda: [self.update_record(pass_var, web_var, user_var),
+                                                 self.confirm_record_input()])
+        confirm_btn.pack(expand=True, fill=tk.BOTH)
+
+    def create_save_record_btn(self):
         add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.create_save_toplevel,
-                             width=20, text="Save password")
-        add_pass.grid(row=3, column=1, sticky=tk.NSEW, padx=2, pady=2)
+                             width=20, text="Save record")
+        add_pass.grid(row=3, column=0, sticky=tk.NSEW, padx=2, pady=2)
         return add_pass
 
     def create_save_toplevel(self):
@@ -141,7 +172,7 @@ class UI(Account):
         del_pas = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
                             command=lambda: self.create_delete_toplevel(),
                             width=20, text="Delete record")
-        del_pas.grid(row=3, column=2, sticky=tk.NSEW, padx=2, pady=2)
+        del_pas.grid(row=3, column=1, sticky=tk.NSEW, padx=2, pady=2)
         return del_pas
 
     def create_delete_toplevel(self):
