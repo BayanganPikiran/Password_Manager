@@ -29,8 +29,11 @@ class Account:
         print(self.cursor.fetchall())
         self.conn.commit()
 
-    def update_record(self):
-        pass
+    def update_record(self, password, site, user):
+        update = "UPDATE accounts SET password=? WHERE website=? AND username=?"
+        parameters = (password, site, user)
+        self.cursor.execute(update, parameters)
+        self.conn.commit()
 
     def fetch_password(self, site, user):
         query = "SELECT password FROM accounts WHERE website=? AND username=?"
@@ -41,8 +44,11 @@ class Account:
             password = str(item).strip("'()',")
             return password
 
-    def delete_record(self):
-        pass
+    def delete_record(self, site, username):
+        delete = "DELETE from accounts WHERE website=? AND username=?"
+        parameters = (site, username)
+        self.cursor.execute(delete, parameters)
+        self.conn.commit()
 
     def generate_password(self):
         pass
