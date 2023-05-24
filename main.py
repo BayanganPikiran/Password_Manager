@@ -2,6 +2,7 @@ import tkinter as tk
 from constants import *
 from accounts import *
 import random
+import pyperclip
 
 
 class UI(Account):
@@ -32,6 +33,7 @@ class UI(Account):
         self.retrieve_password_btn = self.create_retrieve_pass_btn()
         self.update_password_btn = self.create_update_pass_btn()
 
+    # Frames and Canvas
     def create_logo_frame(self):
         logo_frame = tk.Frame(self.root, bg=BACKGROUND_WHITE)
         logo_frame.pack(expand=True, fill=tk.BOTH)
@@ -84,59 +86,6 @@ class UI(Account):
         password = ''.join(sorted(password_list, key=lambda x: random.random()))
         self.password_var.set(password)
 
-    def create_retrieve_pass_btn(self):
-        get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
-                             command=lambda: self.retrieve_password_toplevel(),
-                             width=20, text="Retrieve password")
-        get_pass.grid(row=4, column=0, sticky=tk.NSEW, padx=2, pady=2)
-        return get_pass
-
-    def retrieve_password_toplevel(self):
-        web_var = self.website_var.get()
-        user_var = self.username_var.get()
-        pass_var = self.fetch_password(web_var, user_var)
-        retrieve_pass = tk.Toplevel(width=200, height=200, pady=5, padx=5)
-        retrieve_pass.title("Retrieve Password")
-        retrieve_pass.wm_transient(self.root)
-        header = tk.Label(retrieve_pass, text="The password for:", font=FONT_TOPLEVEL)
-        header.pack(expand=True, fill=tk.BOTH)
-        site = tk.Label(retrieve_pass, text=f"Website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        site.pack(expand=True, fill=tk.BOTH)
-        user = tk.Label(retrieve_pass, text=f"Username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        user.pack(expand=True, fill=tk.BOTH)
-        password = tk.Label(retrieve_pass, text=f"is: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        password.pack(expand=True, fill=tk.BOTH)
-
-    def create_update_pass_btn(self):
-        update_btn = tk.Button(self.fields_frame, bg=BUTTON_GRAY, text="Update password",
-                               command=self.create_update_pass_toplevel)
-        update_btn.grid(row=4, column=1, sticky=tk.NSEW, padx=2, pady=2)
-        return update_btn
-
-    def create_update_pass_toplevel(self):
-        web_var = self.website_var.get()
-        user_var = self.username_var.get()
-        pass_var = self.password_var.get()
-        update_pass = tk.Toplevel(width=200, height=200, padx=5, pady=5)
-        update_pass.title("Update Password")
-        update_pass.wm_transient(self.root)
-        label_frame = tk.Frame(update_pass, width=190, height=160)
-        label_frame.pack(expand=True, fill=tk.BOTH)
-        btn_frame = tk.Frame(update_pass, width=190, height=30, pady=5)
-        btn_frame.pack(expand=True, fill=tk.BOTH)
-        header = tk.Label(label_frame, text="You are updating your password for:", font=FONT_TOPLEVEL)
-        header.pack(expand=True, fill=tk.BOTH)
-        site = tk.Label(label_frame, text=f"Website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        site.pack(expand=True, fill=tk.BOTH)
-        user = tk.Label(label_frame, text=f"Username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        user.pack(expand=True, fill=tk.BOTH)
-        password = tk.Label(label_frame, text=f"To: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
-        password.pack(expand=True, fill=tk.BOTH)
-        confirm_btn = tk.Button(btn_frame, text="Update password",
-                                command=lambda: [self.update_record(pass_var, web_var, user_var),
-                                                 self.confirm_record_input()])
-        confirm_btn.pack(expand=True, fill=tk.BOTH)
-
     def create_save_record_btn(self):
         add_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY, command=self.create_save_toplevel,
                              width=20, text="Save record")
@@ -144,29 +93,30 @@ class UI(Account):
         return add_pass
 
     def create_save_toplevel(self):
-        save_acct = tk.Toplevel(width=200, height=200, pady=5, padx=5)
-        save_acct.title("Save Account Details")
-        save_acct.wm_transient(self.root)
-        label_frame = tk.Frame(save_acct, width=190, height=160)
+        web_var = self.website_var.get()
+        user_var = self.username_var.get()
+        pass_var = self.password_var.get()
+        save_record = tk.Toplevel(padx=5, pady=5)
+        save_record.geometry(("{}x{}".format(TL_WIDTH, TL_HEIGHT)))
+        save_record.title("Save Record")
+        save_record.wm_transient(self.root)
+        label_frame = tk.Frame(save_record, width=TL_WIDTH, height=TL_LBLFRM_HT)
         label_frame.pack(expand=True, fill=tk.BOTH)
-        btn_frame = tk.Frame(save_acct, width=190, height=30)
+        btn_frame = tk.Frame(save_record, width=TL_WIDTH, height=TL_BTNFRM_HT)
         btn_frame.pack(expand=True, fill=tk.BOTH, pady=5)
-        header = tk.Label(label_frame, text="Confirm the following details:", font=FONT_TOPLEVEL)
-        site_label = tk.Label(label_frame, text=f"website: {self.website_var.get()}", font=FONT_TOPLEVEL)
-        user_label = tk.Label(label_frame, text=f"username: {self.username_var.get()}", font=FONT_TOPLEVEL)
-        pass_label = tk.Label(label_frame, text=f"password: {self.password_var.get()}", font=FONT_TOPLEVEL)
-        header.grid(row=0, column=0, sticky=tk.NSEW, pady=5)
-        site_label.grid(row=1, column=0, sticky=tk.W)
-        user_label.grid(row=2, column=0, sticky=tk.W)
-        pass_label.grid(row=3, column=0, sticky=tk.W)
+        site_label = tk.Label(label_frame, text=f"website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user_label = tk.Label(label_frame, text=f"username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        pass_label = tk.Label(label_frame, text=f"password: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site_label.pack(expand=True, fill=tk.BOTH)
+        user_label.pack(expand=True, fill=tk.BOTH)
+        pass_label.pack(expand=True, fill=tk.BOTH)
         save_btn = tk.Button(btn_frame, text="Save", anchor=tk.CENTER,
-                             command=lambda: [self.create_record(self.website_var.get(),
-                                                                 self.username_var.get(),
-                                                                 self.password_var.get()),
-                                              self.confirm_record_input(),
-                                              save_acct.destroy()], )
+                             command=lambda: [self.create_record(web_var,
+                                                                 user_var,
+                                                                 pass_var),
+                                              save_record.destroy()])
         save_btn.pack(expand=True, fill=tk.BOTH)
-        save_acct.mainloop()
+        save_record.mainloop()
 
     def create_del_record_btn(self):
         del_pas = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
@@ -178,30 +128,102 @@ class UI(Account):
     def create_delete_toplevel(self):
         web_var = self.website_var.get()
         user_var = self.username_var.get()
-        delete_record = tk.Toplevel(width=200, height=200, pady=5, padx=5)
+        pass_var = self.password_var.get()
+        delete_record = tk.Toplevel(padx=5, pady=5)
+        delete_record.geometry(("{}x{}".format(TL_WIDTH, TL_HEIGHT)))
         delete_record.title("Delete Record")
         delete_record.wm_transient(self.root)
-        label_frame = tk.Frame(delete_record, width=190, height=160)
+        label_frame = tk.Frame(delete_record, width=TL_WIDTH, height=TL_LBLFRM_HT)
         label_frame.pack(expand=True, fill=tk.BOTH)
-        btn_frame = tk.Frame(delete_record, width=190, height=30)
+        btn_frame = tk.Frame(delete_record, width=TL_WIDTH, height=TL_BTNFRM_HT)
         btn_frame.pack(expand=True, fill=tk.BOTH)
-        header = tk.Label(label_frame, text="Please confirm the deletion of the following record:", font=FONT_TOPLEVEL)
-        header.pack(expand=True, fill=tk.BOTH)
-        site = tk.Label(label_frame, text=f"Website: {web_var}", font=FONT_TOPLEVEL, anchor=tk.W)
-        site.pack(expand=True, fill=tk.BOTH)
-        user = tk.Label(label_frame, text=f"Username: {user_var}", font=FONT_TOPLEVEL, anchor=tk.W)
-        user.pack(expand=True, fill=tk.BOTH)
-        confirm_btn = tk.Button(btn_frame, text="Confirm delete", bg=BUTTON_GRAY,
-                                command=lambda: [self.delete_record(web_var, user_var), self.confirm_record_input()])
+        site_label = tk.Label(label_frame, text=f"website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user_label = tk.Label(label_frame, text=f"username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        pass_label = tk.Label(label_frame, text=f"password: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site_label.pack(expand=True, fill=tk.BOTH)
+        user_label.pack(expand=True, fill=tk.BOTH)
+        pass_label.pack(expand=True, fill=tk.BOTH)
+        confirm_btn = tk.Button(btn_frame, text="Delete Record", 
+                                command=lambda: [self.delete_record(web_var, user_var), delete_record.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
+        delete_record.mainloop()
+
+    def create_retrieve_pass_btn(self):
+        get_pass = tk.Button(self.fields_frame, bg=BUTTON_GRAY,
+                             command=lambda: self.retrieve_password_toplevel(),
+                             width=20, text="Retrieve password")
+        get_pass.grid(row=4, column=0, sticky=tk.NSEW, padx=2, pady=2)
+        return get_pass
+
+    def retrieve_password_toplevel(self):
+        web_var = self.website_var.get()
+        user_var = self.username_var.get()
+        pass_var = self.fetch_password(web_var, user_var)
+        retrieve_pass = tk.Toplevel(padx=5, pady=5)
+        retrieve_pass.geometry(("{}x{}".format(TL_WIDTH, TL_HEIGHT)))
+        retrieve_pass.title("Retrieve Password")
+        retrieve_pass.wm_transient(self.root)
+        label_frame = tk.Frame(retrieve_pass, width=TL_WIDTH, height=TL_LBLFRM_HT)
+        label_frame.pack(expand=True, fill=tk.BOTH)
+        btn_frame = tk.Frame(retrieve_pass, width=TL_WIDTH, height=TL_BTNFRM_HT)
+        btn_frame.pack(expand=True, fill=tk.BOTH)
+        site_label = tk.Label(label_frame, text=f"website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user_label = tk.Label(label_frame, text=f"username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site_label.pack(expand=True, fill=tk.BOTH)
+        user_label.pack(expand=True, fill=tk.BOTH)
+        password = tk.Entry(label_frame, bd=3, font=FONT_TOPLEVEL)
+        password.insert(0, pass_var)
+        password.config(state="readonly")
+        password.pack(expand=True, fill=tk.BOTH)
+        retrieve_pass_btn = tk.Button(btn_frame, text="Close",
+                                      command=lambda: retrieve_pass.destroy())
+        retrieve_pass_btn.pack(expand=True, fill=tk.BOTH)
+        retrieve_pass.mainloop()
+
+    def create_update_pass_btn(self):
+        update_btn = tk.Button(self.fields_frame, bg=BUTTON_GRAY, text="Update password",
+                               command=self.create_update_pass_toplevel)
+        update_btn.grid(row=4, column=1, sticky=tk.NSEW, padx=2, pady=2)
+        return update_btn
+
+    def create_update_pass_toplevel(self):
+        web_var = self.website_var.get()
+        user_var = self.username_var.get()
+        pass_var = self.password_var.get()
+        update_pass = tk.Toplevel(padx=5, pady=5)
+        update_pass.geometry(("{}x{}".format(TL_WIDTH, TL_HEIGHT)))
+        update_pass.title("Update Password")
+        update_pass.wm_transient(self.root)
+        label_frame = tk.Frame(update_pass, width=TL_WIDTH, height=TL_LBLFRM_HT)
+        label_frame.pack(expand=True, fill=tk.BOTH)
+        btn_frame = tk.Frame(update_pass, width=TL_WIDTH, height=TL_BTNFRM_HT)
+        btn_frame.pack(expand=True, fill=tk.BOTH)
+        site_label = tk.Label(label_frame, text=f"website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user_label = tk.Label(label_frame, text=f"username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        pass_label = tk.Label(label_frame, text=f"password: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site_label.pack(expand=True, fill=tk.BOTH)
+        user_label.pack(expand=True, fill=tk.BOTH)
+        pass_label.pack(expand=True, fill=tk.BOTH)
+        confirm_btn = tk.Button(btn_frame, text="Update password",
+                                command=lambda: [self.update_record(pass_var, web_var, user_var),
+                                                 update_pass.destroy()])
+        confirm_btn.pack(expand=True, fill=tk.BOTH)
+        update_pass.mainloop()
 
 
 
-    def get_account_elements(self):
-        website = self.website_var.get()
-        username = self.username_var.get()
-        password = self.password_var.get()
-        return website, username, password
+
+
+
+
+
+
+
+    # def get_account_elements(self):
+    #     website = self.website_var.get()
+    #     username = self.username_var.get()
+    #     password = self.password_var.get()
+    #     return website, username, password
 
     def run_app(self):
         self.root.mainloop()
