@@ -196,7 +196,8 @@ class UI(Account):
         user = tk.Label(label_frame, text=f"Username: {user_var}", font=FONT_TOPLEVEL, anchor=tk.W)
         user.pack(expand=True, fill=tk.BOTH)
         confirm_btn = tk.Button(btn_frame, text="Confirm delete", bg=BUTTON_GRAY,
-                                command=lambda: [self.delete_record(web_var, user_var), self.confirm_record_input()])
+                                command=lambda: [self.delete_record(web_var, user_var),
+                                                 self.confirm_record_input(), delete_record.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
 
 
