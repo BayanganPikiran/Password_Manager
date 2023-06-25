@@ -98,8 +98,6 @@ class UI(Account):
         retrieve_pass = tk.Toplevel(width=200, height=200, pady=5, padx=5)
         retrieve_pass.title("Get Password")
         retrieve_pass.wm_transient(self.root)
-        # header = tk.Label(retrieve_pass, text="The password for:", font=FONT_TOPLEVEL)
-        # header.pack(expand=True, fill=tk.BOTH)
         site = tk.Label(retrieve_pass, text=f"Website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
         site.pack(expand=True, fill=tk.BOTH)
         user = tk.Label(retrieve_pass, text=f"Username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
@@ -108,8 +106,10 @@ class UI(Account):
         copy_pass.pack(expand=True, fill=tk.BOTH)
         password = tk.Entry(retrieve_pass, bd=0, font=FONT_TOPLEVEL)
         password.insert(0, pass_var)
-        # password = tk.Label(retrieve_pass, text=f"is: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
         password.pack(expand=True, fill=tk.BOTH)
+        close_btn = tk.Button(retrieve_pass, bg=BUTTON_GRAY, text="Close Window",
+                              command=lambda: retrieve_pass.destroy())
+        close_btn.pack(expand=True, fill=tk.BOTH)
 
     def create_update_pass_btn(self):
         update_btn = tk.Button(self.fields_frame, bg=BUTTON_GRAY, text="Update password",
