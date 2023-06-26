@@ -1,5 +1,4 @@
 import sqlite3
-import random
 
 
 class Account:
@@ -8,27 +7,24 @@ class Account:
         self.database = db_path
         self.conn = sqlite3.connect(self.database)
         self.cursor = self.conn.cursor()
-        self.account_table = self.records_accounts_table()
+        self.account_table = self.create_accounts_table()
 
-    def record_already_exists(self, site, user):
-        is_record_query = "SELECT * FROM accounts WHERE EXISTS website=? AND username=?"
-        parameters = (site, user)
-        self.cursor.execute(is_record_query, parameters)
+    def create_accounts_table(self):
+        accounts_table = self.cursor.execute("""CREATE TABLE IF NOT EXISTS accounts(
+            id integer PRIMARY KEY AUTOINCREMENT, 
+            website text NOT NULL,
+            username text NOT NULL,
+            password text,
+            UNIQUE(website, username))""")
         self.conn.commit()
+        return accounts_table
 
-    def records_accounts_table(self):
-        records_table = self.cursor.execute("""CREATE TABLE IF NOT EXISTS accounts(
-            record_id INTEGER PRIMARY KEY, 
-            website TEXT NOT NULL,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL)""")
-        self.conn.commit()
-        return records_table
-
-    def create_record(self, site, user, password):
-        create_record = "INSERT INTO accounts (website, username, password) VALUES (?, ?, ?)"
-        parameters = (site, user, password)
-        self.cursor.execute(create_record, parameters)
+    def create_record(self, website, username, password):
+        try:
+            self.cursor.execute("INSERT OR ABORT INTO accounts (website, username, password) VALUES (?, ?, ?)",
+                                (website, username, password))
+        except sqlite3.IntegrityError:
+            pass
         self.conn.commit()
 
     def confirm_record_input(self):
@@ -52,8 +48,8 @@ class Account:
             password = str(item).strip("'()',")
             return password
 
-    def delete_record(self, site, user):
+    def delete_record(self, site, username):
         delete = "DELETE from accounts WHERE website=? AND username=?"
-        parameters = (site, user)
+        parameters = (site, username)
         self.cursor.execute(delete, parameters)
         self.conn.commit()
