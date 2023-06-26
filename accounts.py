@@ -53,12 +53,3 @@ class Account:
         parameters = (site, username)
         self.cursor.execute(delete, parameters)
         self.conn.commit()
-
-    def generate_password(self):
-        pass
-
-    def retrieve_account(self):
-        pass
-
-    def delete_account(self):
-        pass
