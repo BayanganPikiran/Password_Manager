@@ -2,7 +2,6 @@ import tkinter as tk
 from constants import *
 from accounts import *
 import random
-import pyperclip
 
 
 class UI(Account):
@@ -143,7 +142,7 @@ class UI(Account):
         site_label.pack(expand=True, fill=tk.BOTH)
         user_label.pack(expand=True, fill=tk.BOTH)
         pass_label.pack(expand=True, fill=tk.BOTH)
-        confirm_btn = tk.Button(btn_frame, text="Delete Record", 
+        confirm_btn = tk.Button(btn_frame, text="Delete Record",
                                 command=lambda: [self.delete_record(web_var, user_var), delete_record.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
         delete_record.mainloop()
@@ -209,21 +208,6 @@ class UI(Account):
                                                  update_pass.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
         update_pass.mainloop()
-
-
-
-
-
-
-
-
-
-
-    # def get_account_elements(self):
-    #     website = self.website_var.get()
-    #     username = self.username_var.get()
-    #     password = self.password_var.get()
-    #     return website, username, password
 
     def run_app(self):
         self.root.mainloop()
