@@ -108,7 +108,7 @@ class UI(Account):
         password.insert(0, pass_var)
         password.pack(expand=True, fill=tk.BOTH)
         close_btn = tk.Button(retrieve_pass, bg=BUTTON_GRAY, text="Close Window",
-                              command=lambda: retrieve_pass.destroy())
+                              command=lambda: [self.reset_entry(), retrieve_pass.destroy()])
         close_btn.pack(expand=True, fill=tk.BOTH)
 
     def create_update_pass_btn(self):
@@ -128,17 +128,16 @@ class UI(Account):
         label_frame.pack(expand=True, fill=tk.BOTH)
         btn_frame = tk.Frame(update_pass, width=190, height=30, pady=5)
         btn_frame.pack(expand=True, fill=tk.BOTH)
-        header = tk.Label(label_frame, text="You are updating your password for:", font=FONT_TOPLEVEL)
-        header.pack(expand=True, fill=tk.BOTH)
-        site = tk.Label(label_frame, text=f"Website: {web_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        site = tk.Label(label_frame, text=f"Website: {web_var}", font=FONT_TOPLEVEL)
         site.pack(expand=True, fill=tk.BOTH)
-        user = tk.Label(label_frame, text=f"Username: {user_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        user = tk.Label(label_frame, text=f"Username: {user_var}", font=FONT_TOPLEVEL)
         user.pack(expand=True, fill=tk.BOTH)
-        password = tk.Label(label_frame, text=f"To: {pass_var}", anchor=tk.W, font=FONT_TOPLEVEL)
+        password = tk.Label(label_frame, text=f"Password: {pass_var}", font=FONT_TOPLEVEL)
         password.pack(expand=True, fill=tk.BOTH)
         confirm_btn = tk.Button(btn_frame, text="Update password",
                                 command=lambda: [self.update_record(pass_var, web_var, user_var),
-                                                 self.confirm_record_input(), update_pass.destroy()])
+                                                 self.confirm_record_input(),
+                                                 update_pass.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
 
     def create_save_record_btn(self):
@@ -149,26 +148,24 @@ class UI(Account):
 
     def create_save_toplevel(self):
         save_acct = tk.Toplevel(width=200, height=200, pady=5, padx=5)
-        save_acct.title("Save Account Details")
+        save_acct.title("Save Account")
         save_acct.wm_transient(self.root)
         label_frame = tk.Frame(save_acct, width=190, height=160)
         label_frame.pack(expand=True, fill=tk.BOTH)
         btn_frame = tk.Frame(save_acct, width=190, height=30)
         btn_frame.pack(expand=True, fill=tk.BOTH, pady=5)
-        header = tk.Label(label_frame, text="Confirm the following details:", font=FONT_TOPLEVEL)
         site_label = tk.Label(label_frame, text=f"website: {self.website_var.get()}", font=FONT_TOPLEVEL)
+        site_label.pack(expand=True, fill=tk.BOTH)
         user_label = tk.Label(label_frame, text=f"username: {self.username_var.get()}", font=FONT_TOPLEVEL)
+        user_label.pack(expand=True, fill=tk.BOTH)
         pass_label = tk.Label(label_frame, text=f"password: {self.password_var.get()}", font=FONT_TOPLEVEL)
-        header.grid(row=0, column=0, sticky=tk.NSEW, pady=5)
-        site_label.grid(row=1, column=0, sticky=tk.W)
-        user_label.grid(row=2, column=0, sticky=tk.W)
-        pass_label.grid(row=3, column=0, sticky=tk.W)
+        pass_label.pack(expand=True, fill=tk.BOTH)
         save_btn = tk.Button(btn_frame, text="Save", anchor=tk.CENTER,
                              command=lambda: [self.create_record(self.website_var.get(),
                                                                  self.username_var.get(),
                                                                  self.password_var.get()),
-                                              self.confirm_record_input(),
-                                              save_acct.destroy()], )
+                                              self.reset_entry(),
+                                              save_acct.destroy()])
         save_btn.pack(expand=True, fill=tk.BOTH)
         save_acct.mainloop()
 
@@ -189,24 +186,23 @@ class UI(Account):
         label_frame.pack(expand=True, fill=tk.BOTH)
         btn_frame = tk.Frame(delete_record, width=190, height=30)
         btn_frame.pack(expand=True, fill=tk.BOTH)
-        header = tk.Label(label_frame, text="Please confirm the deletion of the following record:", font=FONT_TOPLEVEL)
-        header.pack(expand=True, fill=tk.BOTH)
-        site = tk.Label(label_frame, text=f"Website: {web_var}", font=FONT_TOPLEVEL, anchor=tk.W)
+        site = tk.Label(label_frame, text=f"Website: {web_var}", font=FONT_TOPLEVEL)
         site.pack(expand=True, fill=tk.BOTH)
-        user = tk.Label(label_frame, text=f"Username: {user_var}", font=FONT_TOPLEVEL, anchor=tk.W)
+        user = tk.Label(label_frame, text=f"Username: {user_var}", font=FONT_TOPLEVEL)
         user.pack(expand=True, fill=tk.BOTH)
         confirm_btn = tk.Button(btn_frame, text="Confirm delete", bg=BUTTON_GRAY,
                                 command=lambda: [self.delete_record(web_var, user_var),
-                                                 self.confirm_record_input(), delete_record.destroy()])
+                                                 self.reset_entry(),
+                                                 delete_record.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
 
-
-
-    def get_account_elements(self):
-        website = self.website_var.get()
-        username = self.username_var.get()
-        password = self.password_var.get()
-        return website, username, password
+    def reset_entry(self):
+        self.website_entry.delete(0, "end")
+        self.website_entry.insert(0, "Enter website url")
+        self.username_entry.delete(0, "end")
+        self.username_entry.insert(0, "Enter email or username")
+        self.password_entry.delete(0, "end")
+        self.password_entry.insert(0, "Enter password or click generate button")
 
     def run_app(self):
         self.root.mainloop()
