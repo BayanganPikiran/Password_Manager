@@ -136,7 +136,6 @@ class UI(Account):
         password.pack(expand=True, fill=tk.BOTH)
         confirm_btn = tk.Button(btn_frame, text="Update password",
                                 command=lambda: [self.update_record(pass_var, web_var, user_var),
-                                                 self.confirm_record_input(),
                                                  update_pass.destroy()])
         confirm_btn.pack(expand=True, fill=tk.BOTH)
 
