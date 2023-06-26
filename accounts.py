@@ -12,15 +12,20 @@ class Account:
 
     def create_accounts_table(self):
         accounts_table = self.cursor.execute("""CREATE TABLE IF NOT EXISTS accounts(
-            website text,
-            username text,
-            password text)""")
+            id integer PRIMARY KEY AUTOINCREMENT, 
+            website text NOT NULL,
+            username text NOT NULL,
+            password text,
+            UNIQUE(website, username))""")
         self.conn.commit()
         return accounts_table
 
     def create_record(self, website, username, password):
-        self.cursor.execute("INSERT INTO accounts (website, username, password) VALUES (?, ?, ?)",
-                            (website, username, password))
+        try:
+            self.cursor.execute("INSERT OR ABORT INTO accounts (website, username, password) VALUES (?, ?, ?)",
+                                (website, username, password))
+        except sqlite3.IntegrityError:
+            pass
         self.conn.commit()
 
     def confirm_record_input(self):
